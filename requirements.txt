@@ -1,5 +1,4 @@
 openpyxl
-smtplib3
 Flask
 Werkzeug
 google-generativeai
