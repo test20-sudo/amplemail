@@ -14,8 +14,9 @@ ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Configure the Gemini API
-genai.configure(api_key='AIzaSyAYaBIKu3m-LcHGj-11tBJpmo6yMKU-NB4')  # Replace with your actual API key
+
+api_key = os.getenv('GEMINI_API_KEY')
+genai.configure(api_key=api_key) 
 model = genai.GenerativeModel('gemini-1.5-pro')
 
 def allowed_file(filename):
