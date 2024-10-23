@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmpleMail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #b8c7ff;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(16, 18, 27, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            width: 95%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .trademark {
+            font-size: 0.5em;
+            vertical-align: super;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: 300;
+            color: #00ffff;
+            font-size: 1em;
+        }
+        input, textarea {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #b8c7ff;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        input[type="submit"], .btn-primary {
+            cursor: pointer;
+            background: linear-gradient(45deg, #7928CA, #FF0080);
+            color: #ffffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            width: 100%;
+        }
+        input[type="submit"]:hover, .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 128, 0.4);
+        }
+        .optimize-btn {
+            background: linear-gradient(45deg, #7928CA, #FF0080);
+            color: #ffffff;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9em;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+        .optimize-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 128, 0.8);
+        }
+        .optimize-btn::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF0080, #7928CA, #FF0080);
+            z-index: -1;
+            filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .optimize-btn:hover::before {
+            opacity: 1;
+        }
+        .optimize-btn.loading {
+            background: linear-gradient(45deg, #7928CA, #FF0080, #7928CA);
+            background-size: 200% 200%;
+            animation: pulse 1.5s ease infinite;
+        }
+        .optimize-btn.complete {
+            background: #00FF00;
+            color: #000000;
+        }
+        @keyframes pulse {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .file-upload input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            cursor: inherit;
+            display: block;
+        }
+
+        .file-upload-btn {
+            background: linear-gradient(45deg, #00ffff, #00bfff);
+            color: #0f0c29;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        #sendButton {
+            background: linear-gradient(45deg, #00e5ff, #0077be);
+            color: #0f0c29;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        .file-upload-btn:hover, #sendButton:hover {
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .file-upload-btn:hover {
+            background: linear-gradient(45deg, #00bfff, #00ffff);
+        }
+
+        #sendButton:hover {
+            background: linear-gradient(45deg, #0077be, #00e5ff);
+        }
+
+        .file-upload-btn.uploading {
+            background: linear-gradient(45deg, #00ffff, #00bfff, #00ffff);
+            background-size: 200% 200%;
+            animation: gradientShift 1s ease infinite;
+        }
+
+        #sendButton.sending {
+            background: linear-gradient(45deg, #00e5ff, #0077be, #005f9e, #00e5ff);
+            background-size: 300% 300%;
+            animation: sendButtonGradientShift 2s ease infinite;
+        }
+
+        .file-upload-btn.complete, #sendButton.complete {
+            background: #00ff00;
+            color: #0f0c29;
+        }
+
+        @keyframes gradientShift {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        @keyframes sendButtonGradientShift {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+
+        .success-message {
+            color: #00ff00;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+            display: none;
+        }
+
+        /* Remove all cube-related styles */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 13, 49, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: #D6FFF6;
+        }
+
+        .loading-text {
+            font-size: 1.5em;
+            margin-top: 20px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Remove all cube-related keyframe animations */
+
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary .loading-text {
+            display: none;
+        }
+
+        .btn-primary.loading .loading-text {
+            display: inline-block;
+        }
+
+        .btn-primary.loading .original-text {
+            display: none;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .btn-primary.loading {
+            background: linear-gradient(45deg, #00ffff, #00bfff, #7928CA);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            color: #0f0c29;
+        }
+
+        .btn-primary.complete {
+            background: #00FF00;
+            color: #0f0c29;
+        }
+
+        .success-message {
+            color: #00FF00;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AmpleMail<span class="trademark">TM</span></h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <form id="emailForm" method="POST" enctype="multipart/form-data">
+            <label for="file">Excel File:</label>
+            <div class="file-upload">
+                <button type="button" class="file-upload-btn">Choose File</button>
+                <input type="file" name="file" id="file" accept=".xlsx,.xls" required>
+            </div>
+            
+            <label for="email_subject">Email Subject:</label>
+            <input type="text" name="email_subject" required>
+            
+            <div class="content-label-wrapper">
+                <label for="email_content">Email Content:</label>
+            </div>
+            <textarea name="email_content" id="email_content" rows="5" required></textarea>
+            <!--<button type="button" class="optimize-btn" id="optimizeBtn">Enhance</button>!-->
+            <!--<br>!-->
+            <label for="sender_email">Sender Email:</label>
+            <input type="email" name="sender_email" required>
+            
+            <label for="sender_password">App Password:</label>
+            <input type="password" name="sender_password" required>
+            
+            <input type="submit" value="Send Mass Email" id="sendButton">
+        </form>
+        <div id="successMessage" class="success-message"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('file');
+            const fileButton = document.querySelector('.file-upload-btn');
+            const emailForm = document.getElementById('emailForm');
+            const sendButton = document.getElementById('sendButton');
+            const successMessage = document.getElementById('successMessage');
+
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileButton.classList.add('uploading');
+                    fileButton.textContent = 'Uploading...';
+
+                    setTimeout(() => {
+                        fileButton.classList.remove('uploading');
+                        fileButton.classList.add('complete');
+                        fileButton.textContent = 'File Uploaded';
+                    }, 2000);
+                }
+            });
+
+            fileButton.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            emailForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                sendButton.classList.add('sending');
+                sendButton.value = 'Sending...';
+
+                const formData = new FormData(emailForm);
+
+                fetch('/send_mass_email', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    sendButton.classList.remove('sending');
+                    sendButton.classList.add('complete');
+                    sendButton.value = 'Sent Successfully!';
+                    successMessage.textContent = data.message;
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        sendButton.classList.remove('complete');
+                        sendButton.value = 'Send Mass Email';
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                })
+                .catch(error => {
+                    sendButton.classList.remove('sending');
+                    sendButton.value = 'Send Mass Email';
+                    alert('An error occurred while sending emails: ' + error.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
